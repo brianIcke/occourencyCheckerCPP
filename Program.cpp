@@ -1,27 +1,26 @@
 #include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/case_conv.hpp>
 #include <boost/format.hpp>
-#include <boost/format/free_funcs.hpp>
-#include <exception>
+#include <boost/format/format_fwd.hpp>
 #include <iostream>
-#include <iterator>
-#include <memory>
 #include <string>
 #include <vector>
 
 struct Occourencies {
   char character;
+  std::string visualizer;
   int occour;
 
 public:
-  Occourencies(char character, int occour) {
+  Occourencies(char character, std::string visualizer, int occour) {
     this->character = character;
+    this->visualizer = visualizer;
     this->occour = occour;
   }
 };
 
 std::vector<Occourencies> occChecker(std::string myString, std::string chars) {
   int occFound{0};
+  std::string visualizer;
   std::vector<Occourencies> occ;
   boost::to_lower(myString);
 
@@ -29,23 +28,26 @@ std::vector<Occourencies> occChecker(std::string myString, std::string chars) {
     for (int z = 0; z < myString.length(); z++) {
       if (myString[z] == chars[y]) {
         occFound += 1;
+        visualizer.append("*");
+
       }
     }
-    occ.push_back(Occourencies(chars[y], occFound));
+    occ.push_back(Occourencies(chars[y], visualizer, occFound));
     occFound = 0;
+    visualizer.clear();
   }
   return occ;
 };
 
 int main() {
-  std::string myString{"abbccdeefffggghiijjkklllmnoppqrrstuvvvvvvwwwwwwwxxyyzz !"};
-  std::string chars{"abcdefghijklmnopqrstuvwxyz1234567890!/?.,=+-_%"};
+  std::string myString{"abbccdeefffggghiijjkklllmnoppqrrstuvvvvvvwwwwwwwxxyyzz !/?.,=+-_%"};
+  std::string chars{"abcdefghijklmnopqrstuvwxyz1234567890!§$%&/()=?"};
   std::vector<Occourencies> occ{occChecker(myString, chars)};
-  std::string toString {std::to_string(32)};
 
+  std::cout << boost::format("String: %1%\n") % myString << std::endl;
   std::cout << boost::format("%-50s %-20s\n") % "Zeichen" % "Vorkommen";
 
-  for(auto i = 0; i < sizeof(occ); i++) {
-    std::cout << boost::format("%-50s %-20s\n") % occ[i].character % occ[i].occour;
+  for(auto i = 0; i < occ.size(); i++) {
+    std::cout << boost::format("%-50s %-10s %-20s\n") % occ[i].character % occ[i].occour % occ[i].visualizer;
   }
 };
