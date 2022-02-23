@@ -24,15 +24,15 @@ std::vector<Occourencies> occChecker(std::string myString, std::string chars) {
   std::vector<Occourencies> occ;
   boost::to_lower(myString);
 
-  for (int y = 0; y < chars.length(); y++) {
+  for (int y = 32; y < 128; y++) {
     for (int z = 0; z < myString.length(); z++) {
-      if (myString[z] == chars[y]) {
+      if (myString[z] == char (y)) {
         occFound += 1;
         visualizer.append("*");
 
       }
     }
-    occ.push_back(Occourencies(chars[y], visualizer, occFound));
+    occ.push_back(Occourencies(char(y), visualizer, occFound));
     occFound = 0;
     visualizer.clear();
   }
@@ -40,7 +40,7 @@ std::vector<Occourencies> occChecker(std::string myString, std::string chars) {
 };
 
 int main() {
-  std::string myString{"abbccdeefffggghiijjkklllmnoppqrrstuvvvvvvwwwwwwwxxyyzz !/?.,=+-_%"};
+  std::string myString{"LKWPETER!!123"};
   std::string chars{"abcdefghijklmnopqrstuvwxyz1234567890!§$%&/()=?"};
   std::vector<Occourencies> occ{occChecker(myString, chars)};
 
